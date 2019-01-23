@@ -28,6 +28,11 @@ final class StatisticsView: UIView {
         }
     }
     
+    var setCount: String? {
+        get { return countLabel.text }
+        set { countLabel.text = newValue }
+    }
+    
     var setIcon: String? {
         get { return iconLabel.text }
         set { iconLabel.text = newValue }

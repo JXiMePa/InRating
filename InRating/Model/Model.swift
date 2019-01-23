@@ -9,7 +9,6 @@
 import Foundation
 
 struct Post: Decodable {
-    
     let title: String?
     let id: Int?
     let viewsCount: Int?
@@ -30,7 +29,6 @@ struct Post: Decodable {
         case createdAt = "created_at"
     }
 }
-
 
 struct User: Decodable {
     let avatarImage: ImageData?

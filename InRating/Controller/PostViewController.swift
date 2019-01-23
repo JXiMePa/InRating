@@ -25,6 +25,7 @@ final class PostViewController: UIViewController {
 
     //MARK: Property
     private var presenter: PostPP!
+    private var post: Post?
 
     //MARK: Life Cycle
     override func viewDidLoad() {
@@ -37,16 +38,25 @@ final class PostViewController: UIViewController {
         presenter = PostPresenter(with: self)
         postImageView.layer.cornerRadius = 15.0
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let statisticVC = segue.destination as? StatisticViewController {
+            statisticVC.post = post
+        }
+    }
 }
 
 //MARK: PostViewController
 extension PostViewController: PostVCP {
+    
     func updateValues(_ fromPost: Post?) {
-        titleLabel.text = fromPost?.title
-        postImageView.setImageFromStringUrl = fromPost?.attachments?.images?.first?.url
-        repostsLabel.text = String(fromPost?.repostsCount ?? 0)
-        commentsLabel.text = String(fromPost?.commentsCount ?? 0)
-        likeLabel.text = String(fromPost?.likesCount ?? 0)
-        bookmarksLabel.text = String(fromPost?.bookmarksCount ?? 0)
+        guard let post = fromPost else { return }
+        self.post = post
+        titleLabel.text = post.title
+        postImageView.setImageFromStringUrl = post.attachments?.images?.first?.url
+        repostsLabel.text = String(post.repostsCount ?? 0)
+        commentsLabel.text = String(post.commentsCount ?? 0)
+        likeLabel.text = String(post.likesCount ?? 0)
+        bookmarksLabel.text = String(post.bookmarksCount ?? 0)
     }
 }

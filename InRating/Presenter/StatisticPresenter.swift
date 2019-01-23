@@ -22,20 +22,50 @@ final class StatisticPresenter: StatisticPP {
             controller.updateLikersValues(likers)
         }
     }
+
+    private var reposters: [User]? {
+        didSet {
+            controller.updateRepostersValue(reposters)
+        }
+    }
     
+    private var commentators: [User]? {
+        didSet {
+            controller.updateCommentsValues(commentators)
+        }
+    }
+    
+    private var marked: [User]? {
+        didSet {
+            controller.updateMarkedValues(marked)
+        }
+    }
+    
+    //MARK: Init
     init(with controller: StatisticVCP) {
         self.controller = controller
-        getLikers()
+        load()
     }
     
     //MARK: Func
-    private func getLikers() {
-        InternetService.shared.requestAlamofire(Constants.likersString, parameters: Constants.postsParameters) { [weak self] result in
+    private func load() {
+        for value in ApiUrlString.allCases {
+            loadUsers(value)
+        }
+    }
+    
+    private func loadUsers(_ from: ApiUrlString) {
+        InternetService.shared.requestAlamofire(from.rawValue, parameters: Constants.postsParameters) { [weak self] result in
             if let dataResult = result,
                 let data = dataResult["data"] {
-                print(data)
                 if let data = try? JSONSerialization.data(withJSONObject: data) {
-                    self?.likers = try? JSONDecoder().decode([User].self, from: data)
+                    
+                    switch from {
+                    case .likers: self?.likers = try? JSONDecoder().decode([User].self, from: data)
+                    case .reposters: self?.reposters = try? JSONDecoder().decode([User].self, from: data)
+                    case .commentators: self?.commentators = try? JSONDecoder().decode([User].self, from: data)
+                    case .marked: self?.marked = try? JSONDecoder().decode([User].self, from: data)
+                    }
                 }
             }
         }

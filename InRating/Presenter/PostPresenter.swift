@@ -29,9 +29,10 @@ final class PostPresenter: PostPP {
     }
     
     //MARK: Func
-    private func getPost() {
-        InternetService.shared.requestAlamofire(Constants.postsString, parameters: Constants.postsParameters) { [weak self] result in
+    private func getPost() {  //TODO: "comments_count": incorrect!
+        InternetService.shared.requestAlamofire(Constants.posts, parameters: Constants.postsParameters) { [weak self] result in
             if let dataResult = result {
+                print(dataResult)
                 if let data = try? JSONSerialization.data(withJSONObject: dataResult) {
                     let decoder = JSONDecoder()
                     let dateFormatter = DateFormatter()
